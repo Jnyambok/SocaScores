@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from .models import CustomUser
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login ,logout
 from SocaProject import settings
@@ -23,8 +25,8 @@ def signup(request):
          email=request.POST["email"]
          pass1=request.POST["pass1"]
          pass2=request.POST["pass2"]
-         date=request.POST["date"]
-         team=request.POST["pickteam"]
+         myteam=request.POST["pickteam"]
+         #date=request.POST.get("date_of_birth",False)
 
          if User.objects.filter(username=username):
            messages.error(request, "Username already exist!Please pick another username.")
@@ -48,12 +50,18 @@ def signup(request):
 
 
          myuser=User.objects.create_user(username,email,pass1)
+         #mydetails=User.objects.create_user(email,myteam)
+         #mydetails=User.objects.create(fave_team=myteam)-- number 1
+         mydetails = CustomUser.objects.create(fave_team=myteam)
+         #mydetails=CustomUser(email=request.user,fave_team=myteam)#--number 2()working formula somewhere here
          myuser.first_name = fname
          myuser.last_name = lname
-         myuser.fave_team = team
          myuser.is_active = True
-         #myuser.team_name = team
          myuser.save()
+         mydetails.save()
+
+
+
          messages.success(request,"Your account has been successfully created!")
 
          #Welcome Email
@@ -77,7 +85,8 @@ def signin(request):
      if user is not None:
         login(request,user)
         fname=user.first_name
-        return render(request,"authentication/index.html", {'fname':fname})
+        fave_team=user.fave_team
+        return render(request,"authentication/index.html", {'fname':fname}, {'myteam':myteam})
 
      else:
         messages.error(request, "Invalid Credentials entered!")
