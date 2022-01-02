@@ -21,7 +21,7 @@
 
 
 {% if user.is_authenticated %}
-<h3>Hello {{fname}}! Your registered team is {{myteam}}!</h3>
+<h3>Hello {{username}}! Your u_id is {{id}}! Your chosen team is {{no_team}}!</h3>
 <h4>You're successfully logged in.</h4>
 <button type="submit"><a href="/signout">SignOut</a></button>
 {% else %}
@@ -30,7 +30,5 @@
 <br/>
 <button type="submit"><a href="/signin">SignIn</a></button>
 {% endif %}
-
-
 </body>
 </html>

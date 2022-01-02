@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from .models import CustomUser
+from .models import OtherDetails
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login ,logout
@@ -25,7 +25,7 @@ def signup(request):
          email=request.POST["email"]
          pass1=request.POST["pass1"]
          pass2=request.POST["pass2"]
-         myteam=request.POST["pickteam"]
+         otherteam=request.POST["noteam"]
          #date=request.POST.get("date_of_birth",False)
 
          if User.objects.filter(username=username):
@@ -50,15 +50,14 @@ def signup(request):
 
 
          myuser=User.objects.create_user(username,email,pass1)
-         #mydetails=User.objects.create_user(email,myteam)
-         #mydetails=User.objects.create(fave_team=myteam)-- number 1
-         mydetails = CustomUser.objects.create(fave_team=myteam)
-         #mydetails=CustomUser(email=request.user,fave_team=myteam)#--number 2()working formula somewhere here
          myuser.first_name = fname
          myuser.last_name = lname
          myuser.is_active = True
          myuser.save()
+         user=User.objects.get(email=email)
+         mydetails=OtherDetails(user=user,no_team=otherteam)
          mydetails.save()
+
 
 
 
@@ -66,7 +65,7 @@ def signup(request):
 
          #Welcome Email
          subject = "Welcome to Soca-Scores"
-         message = "Hello" + myuser.first_name + "!! \n" + "Welcome to SocaScores!!\nThank you for joining the Soca-Scores\n.This email serves as your confirmation email. Enjoy your time with us. \n\nChairman\nNyambok Julius"
+         message = "Hello" + myuser.username + "!! \n" + "Welcome to SocaScores!!\n Thank you for joining the Soca-Scores.This email serves as your confirmation email. Enjoy your time with us. \n\nChairman\nNyambok Julius"
          from_email = settings.EMAIL_HOST_USER
          to_list = [myuser.email]
          send_mail(subject, message, from_email, to_list, fail_silently=True)
@@ -84,9 +83,11 @@ def signin(request):
 
      if user is not None:
         login(request,user)
-        fname=user.first_name
-        fave_team=user.fave_team
-        return render(request,"authentication/index.html", {'fname':fname}, {'myteam':myteam})
+        username=user.username
+        id=user.id
+        other_=OtherDetails.objects.get(user_id=id)
+        no_team=other_.no_team
+        return render(request,"authentication/index.html", {'username':username,'id':id,'no_team':no_team})
 
      else:
         messages.error(request, "Invalid Credentials entered!")

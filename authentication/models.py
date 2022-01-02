@@ -4,10 +4,10 @@ from django.contrib.auth.models import AbstractUser
 from SocaProject import settings
 
 
-class CustomUser(models.Model):
+class OtherDetails(models.Model):
     #user = models.OneToOneField(User, on_delete=models.CASCADE)
-    email = models.ForeignKey(User,on_delete=models.CASCADE)
-    fave_team= models.CharField(max_length=1000)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    no_team = models.CharField(max_length=1000,default='NO TEAM')
 
 def __str__(self):
-    return self.email
+    return self.user
