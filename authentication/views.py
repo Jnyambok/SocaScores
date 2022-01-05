@@ -2,7 +2,6 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .models import OtherDetails
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login ,logout
 from SocaProject import settings
@@ -15,7 +14,9 @@ from django.contrib.sites.shortcuts import get_current_site
 
 
 # Create your views here.
-def home(request):return render(request,"authentication/index.html")
+
+def homepage(request):return render(request,"authentication/homepage.html")
+
 
 def signup(request):
    if request.method == "POST":
@@ -29,7 +30,7 @@ def signup(request):
          #date=request.POST.get("date_of_birth",False)
 
          if User.objects.filter(username=username):
-           messages.error(request, "Username already exist!Please pick another username.")
+           messages.error(request, "Username already exist! Please pick another username.")
            return redirect('signup')
 
          if User.objects.filter(email=email):
@@ -73,7 +74,7 @@ def signup(request):
 
          return redirect('signin')
 
-   return render(request,"authentication/signup.html")
+   return render(request,"authentication/xignup.html")
 
 def signin(request):
    if request.method == "POST":
@@ -87,15 +88,16 @@ def signin(request):
         id=user.id
         other_=OtherDetails.objects.get(user_id=id)
         no_team=other_.no_team
-        return render(request,"authentication/index.html", {'username':username,'id':id,'no_team':no_team})
+        return render(request,"authentication/homepage.html", {'username':username,'no_team':no_team})
 
      else:
         messages.error(request, "Invalid Credentials entered!")
-        return redirect('home')
-   return render(request,"authentication/signin.html")
+        return redirect('homepage')
+   return render(request,"authentication/xignin.html")
 
 
 def signout(request):
    logout(request)
-   messages.success(request,"Account was signed out successfully")
-   return redirect ('home')
+   messages.success(request,"Signed out successfully")
+   return redirect ('homepage')
+
