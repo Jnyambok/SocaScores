@@ -11,8 +11,11 @@ from . tokens import generate_token
 from django.utils.encoding import force_bytes,force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
-
-
+from bs4 import BeautifulSoup
+import requests
+from django.shortcuts import render
+import pandas as pd
+import json
 # Create your views here.
 
 def homepage(request):return render(request,"authentication/homepage.html")
@@ -94,6 +97,51 @@ def signin(request):
         messages.error(request, "Invalid Credentials entered!")
         return redirect('homepage')
    return render(request,"authentication/xignin.html")
+
+
+
+def rest_prem(request):
+    url = "https://www.skysports.com/premier-league-table"
+    req = requests.get(url)
+    soup = BeautifulSoup(req.text, "html.parser")
+    team_name = []
+    team_played= []
+    team_wins = []
+    team_draws = []
+    team_loss = []
+    team_GF = []
+    team_GA = []
+    team_GD = []
+    team_points = []
+
+    team=soup.find('table',{'class':'standing-table__table callfn'}).find('tbody').find_all('tr')
+    for r in team:
+        team_name.append(r.find('td',class_='standing-table__cell standing-table__cell--name').text.strip())
+        team_played.append(r.find_all('td',class_="standing-table__cell")[2].text)
+        team_wins.append(r.find_all('td',class_='standing-table__cell')[3].text)
+        team_draws.append(r.find_all('td',class_='standing-table__cell')[4].text)
+        team_loss.append(r.find_all('td',class_='standing-table__cell')[5].text)
+        team_GF.append(r.find_all('td',class_='standing-table__cell')[6].text)
+        team_GA.append(r.find_all('td',class_='standing-table__cell')[7].text)
+        team_GD.append(r.find_all('td',class_='standing-table__cell')[8].text)
+        team_points.append(r.find_all('td',class_='standing-table__cell')[9].text)
+
+    epl_data=pd.DataFrame({'Team':team_name,'MP':team_played,'W':team_wins,'D':team_draws,'L':team_loss,'GF':team_GF,'GA':team_GA,'GD':team_GD,'Pts':team_points})
+    team_Data=[]
+    allData=[]
+    for i in range(epl_data.shape[0]):
+            temp=epl_data.iloc[i]
+            allData.append(dict(temp))
+    context={'data':allData}
+    return render(request,"authentication/table.html",context)
+
+
+def fixtures(request):
+    return render(request,'authentication/fixtures.html')
+def squad_stats(request):
+    return render(request,'authentication/squad_stats.html')
+
+
 
 
 def signout(request):
