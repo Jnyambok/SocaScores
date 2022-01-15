@@ -50,8 +50,8 @@
                 <!-- Elements -->
                 <div>
                     <!-- Table -->
-                    <h2>Here is how the rest of the Premier league is fairing on!</h2>
-                    <h3>All season stats</h3>
+                    <h2>{{no_team}}</h2>
+                    <h3>My squad 21/22 results and fixtures</h3>
                     <div class="table-wrapper">
 
                     </div>
@@ -102,7 +102,16 @@
                                 <li><a href="#">Profile</a></li>
                                 <li><a href="/signin">Login</a></li>
                                 <li><a href="/signup">Sign up</a></li>
-                                <li><a href="#">{{no_team}} data</a></li>
+                                <li>
+                                    <span class="opener">{{no_team}} data</span>
+                                    <ul>
+                                        <li><a href="/my_team_stats">Standard Stats</a></li>
+                                        <li><a href="/my_fixtures">Scores and Fixtures</a></li>
+                                        <li><a href="/my_shooting">Shooting Stats</a></li>
+                                        <li><a href="/my_minutes">Playing Stats</a></li>
+                                    </ul>
+                                </li>
+
                                 <li>
                                     <span class="opener">Premier League</span>
                                     <ul>
@@ -148,7 +157,7 @@
                 <script src="{%static 'authentication/assets/js/breakpoints.min.js' %}"></script>
                 <script src="{%static 'authentication/assets/js/util.js' %}"></script>
                 <script src="{%static 'authentication/assets/js/main.js' %}"></script>
-                <script src="https://widgets.sports-reference.com/wg.fcgi?css=1&site=fb&url=%2Fen%2Fcomps%2F9%2Fstats%2FPremier-League-Stats&div=div_stats_squads_standard_for"></script>
+                <script src="{{i}}"></script>
             </section>
         </div>
     </div>

@@ -12,10 +12,13 @@ from django.utils.encoding import force_bytes,force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from bs4 import BeautifulSoup
+from .data_structures import stats
 import requests
 from django.shortcuts import render
 import pandas as pd
 import json
+
+
 # Create your views here.
 
 def homepage(request):return render(request,"authentication/homepage.html")
@@ -69,7 +72,7 @@ def signup(request):
 
          #Welcome Email
          subject = "Welcome to Soca-Scores"
-         message = "Hello" + myuser.username + "!! \n" + "Welcome to SocaScores!!\n Thank you for joining the Soca-Scores.This email serves as your confirmation email. Enjoy your time with us. \n\nChairman\nNyambok Julius"
+         message = "Hello" +" "+ myuser.username + "!! \n" + "Welcome to SocaScores!!\n Thank you for joining the Soca-Scores.This email serves as your confirmation email. Enjoy your time with us. \n\nChairman\nNyambok Julius"
          from_email = settings.EMAIL_HOST_USER
          to_list = [myuser.email]
          send_mail(subject, message, from_email, to_list, fail_silently=True)
@@ -88,9 +91,11 @@ def signin(request):
      if user is not None:
         login(request,user)
         username=user.username
+        request.session['name'] = username
         id=user.id
         other_=OtherDetails.objects.get(user_id=id)
         no_team=other_.no_team
+        request.session['team'] = no_team
         return render(request,"authentication/homepage.html", {'username':username,'no_team':no_team})
 
      else:
@@ -132,16 +137,74 @@ def rest_prem(request):
     for i in range(epl_data.shape[0]):
             temp=epl_data.iloc[i]
             allData.append(dict(temp))
-    context={'data':allData}
+    no_team=request.session['team']
+    username=request.session['name']
+    request.session.set_expiry(6000)
+    context={'data':allData, 'no_team':no_team,'username':username}
     return render(request,"authentication/table.html",context)
 
 
 def fixtures(request):
-    return render(request,'authentication/fixtures.html')
+    no_team=request.session['team']
+    username=request.session['name']
+    request.session.set_expiry(6000)
+    context={'no_team':no_team,'username':username}
+    return render(request,'authentication/fixtures.html',context)
+
 def squad_stats(request):
-    return render(request,'authentication/squad_stats.html')
+    no_team=request.session['team']
+    username=request.session['name']
+    request.session.set_expiry(6000)
+    context={'no_team':no_team,'username':username}
+    return render(request,'authentication/squad_stats.html',context)
 
+def my_team_stats(request):
+    std_=stats()
+    standard_stats=std_.df
+    no_team=request.session['team']
+    username=request.session['name']
+    request.session.set_expiry(6000)
+    for index,rows in standard_stats.iterrows():
+        if no_team == index:
+            i=(rows[0])
+    context={'no_team':no_team,'username':username,'i':i}
+    return render(request,'authentication/my_std_stats.html',context)
 
+def my_fixtures(request):
+    std_=stats()
+    standard_stats=std_.df
+    no_team=request.session['team']
+    username=request.session['name']
+    request.session.set_expiry(6000)
+    for index,rows in standard_stats.iterrows():
+        if no_team == index:
+            i=(rows[1])
+    context={'no_team':no_team,'username':username,'i':i}
+    return render(request,'authentication/my_fixtures.html',context)
+
+def my_shooting(request):
+    std_=stats()
+    standard_stats=std_.df
+    no_team=request.session['team']
+    username=request.session['name']
+    request.session.set_expiry(6000)
+    for index,rows in standard_stats.iterrows():
+        if no_team == index:
+            i=(rows[2])
+    context={'no_team':no_team,'username':username,'i':i}
+    return render(request,'authentication/my_shooting.html',context)
+
+def my_minutes(request):
+    std_=stats()
+    standard_stats=std_.df
+    no_team=request.session['team']
+    username=request.session['name']
+    request.session.set_expiry(6000)
+    for index,rows in standard_stats.iterrows():
+        if no_team == index:
+            i=(rows[3])
+    context={'no_team':no_team,'username':username,'i':i}
+    return render(request,'authentication/my_minutes.html',context)
 
 
 def signout(request):
