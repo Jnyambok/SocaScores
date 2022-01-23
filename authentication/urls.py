@@ -15,4 +15,6 @@ path('my_minutes',views.my_minutes, name="my_minutes"),
 path('my_shooting',views.my_shooting, name="my_shooting"),
 path('fixtures',views.fixtures,name="fixtures"),
 path('squad_stats',views.squad_stats,name="squad_stats"),
+path('get_pred',views.get_pred,name="get_pred"),
+path('go_to_pred',views.go_to_pred,name="go_to_pred"),
 ]

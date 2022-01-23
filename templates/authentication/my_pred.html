@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html>
+<head>
+    <title>Soca Scores</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{%static 'authentication/assets/css/main.css' %}" />
+</head>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="/homepage" class="logo"><strong>Soca</strong> Scores</a>
+                <ul class="icons">
+                    <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+                    <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+                    <li><a href="#" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a></li>
+                    <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                    <li><a href="#" class="icon brands fa-medium-m"><span class="label">Medium</span></a></li>
+                </ul>
+            </header>
+
+
+            <div class="col-6 col-12-medium">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <strong>Registration status message:</strong> {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+                <!-- Form -->
+                <h3>Make Predictions</h3>
+
+                <form method="post" action="/get_pred">
+                    {% csrf_token %}
+                    <div class="row gtr-uniform">
+                        <div class="col-12">
+                            <label for="noteam">Pick your Home Team</label>
+                            <select name = "noteam" id="noteam" Required>
+                                <option value = "Arsenal" >Arsenal</option>
+                                <option value = "Aston Villa">Aston Villa</option>
+                                <option value = "Brentford">Brentford</option>
+                                <option value = "Brighton and Hove Albion">Brighton and Hove Albion</option>
+                                <option value = "Burnley">Burnley</option>
+                                <option value = "Chelsea">Chelsea</option>
+                                <option value = "Crystal Palace">Crystal Palace</option>
+                                <option value = "Everton">Everton</option>
+                                <option value = "Leeds United">Leeds United</option>
+                                <option value = "Leicester City">Leicester City</option>
+                                <option value = "Liverpool">Liverpool</option>
+                                <option value = "Manchester City">Manchester City</option>
+                                <option value = "Manchester United" >Manchester United</option>
+                                <option value = "Newcastle United">Newcastle United</option>
+                                <option value = "Norwich City">Norwich City</option>
+                                <option value = "Southampton">Southampton</option>
+                                <option value = "Tottenham Hotspur">Tottenham Hotspur</option>
+                                <option value = "Watford">Watford</option>
+                                <option value = "West Ham United">West Ham United</option>
+                                <option value = "Wolverhampton Wanderers">Wolverhampton Wanderers</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="noteam">Pick your Away Team</label>
+                            <select name = "noteam2" id="noteam2" Required>
+                                <option value = "Arsenal" >Arsenal</option>
+                                <option value = "Aston Villa">Aston Villa</option>
+                                <option value = "Brentford">Brentford</option>
+                                <option value = "Brighton and Hove Albion">Brighton and Hove Albion</option>
+                                <option value = "Burnley">Burnley</option>
+                                <option value = "Chelsea">Chelsea</option>
+                                <option value = "Crystal Palace">Crystal Palace</option>
+                                <option value = "Everton">Everton</option>
+                                <option value = "Leeds United">Leeds United</option>
+                                <option value = "Leicester City">Leicester City</option>
+                                <option value = "Liverpool">Liverpool</option>
+                                <option value = "Manchester City">Manchester City</option>
+                                <option value = "Manchester United" >Manchester United</option>
+                                <option value = "Newcastle United">Newcastle United</option>
+                                <option value = "Norwich City">Norwich City</option>
+                                <option value = "Southampton">Southampton</option>
+                                <option value = "Tottenham Hotspur">Tottenham Hotspur</option>
+                                <option value = "Watford">Watford</option>
+                                <option value = "West Ham United">West Ham United</option>
+                                <option value = "Wolverhampton Wanderers" selected>Wolverhampton Wanderers</option>
+                            </select>
+                        </div>
+                        <!-- Break -->
+                        <!-- Break -->
+                        <!-- Break -->
+                        <div class="col-12">
+                            <ul class="actions">
+                                <li><a href="/get_pred" class="button">Predict</a></li>
+                            </ul>
+                            <h3>Expected Winner: {{team}}!</h3>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="sidebar">
+                    <div class="inner">
+
+
+
+                        <!-- Menu -->
+                        <nav id="menu">
+                            <header class="major">
+                                <h2>Menu</h2>
+                            </header>
+                            <ul>
+                                <li><a href="/homepage">Home</a></li>
+                                <li><a href="#">Profile</a></li>
+                                <li><a href="/signin">Login</a></li>
+                                <li><a href="/signup">Sign up</a></li>
+
+                                <li>
+                                    <span class="opener">{{no_team}} data</span>
+                                    <ul>
+                                        <li><a href="/my_team_stats">Standard Stats</a></li>
+                                        <li><a href="/my_fixtures">Scores and Fixtures</a></li>
+                                        <li><a href="/my_shooting">Shooting Stats</a></li>
+                                        <li><a href="/my_minutes">Playing Stats</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="opener">Premier League</span>
+                                    <ul>
+                                        <li><a href="/rest_prem">League Standings</a></li>
+                                        <li><a href="/fixtures">Fixtures & Results</a></li>
+                                        <li><a href="/squad_stats">Standard Stats</a></li>
+                                        <li><a href="/go_to_pred">Predictions</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/signout">Sign out</a></li>
+                            </ul>
+                        </nav>
+
+                        <!-- Section -->
+
+                        <!-- Section -->
+                        <section>
+                            <header class="major">
+                                <h2>Get in touch</h2>
+                            </header>
+                            <p>We are a very small team and your support will be very much appreciated.Send us your feedback</p>
+                            <ul class="contact">
+                                <li class="icon solid fa-envelope"><a href="#">socascores@app</a></li>
+                                <li class="icon solid fa-phone">(254) 71479990</li>
+                                <li class="icon solid fa-home">Madaraka,Ole Sangale Drive<br />
+                                    TN 00000-0000</li>
+                            </ul>
+                        </section>
+
+                        <!-- Footer -->
+
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+            <!-- Scripts -->
+            <script src="{%static 'authentication/assets/js/jquery.min.js' %}"></script>
+            <script src="{%static 'authentication/assets/js/browser.min.js' %}"></script>
+            <script src="{%static 'authentication/assets/js/breakpoints.min.js' %}"></script>
+            <script src="{%static 'authentication/assets/js/util.js' %}"></script>
+            <script src="{%static 'authentication/assets/js/main.js' %}"></script>
+
+        </div>
+    </div>
+</div>
+</div></body>
+</html>

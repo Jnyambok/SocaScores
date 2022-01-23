@@ -7,7 +7,7 @@
 -->
 <html>
 <head>
-    <title>Elements - Editorial by HTML5 UP</title>
+    <title>Soca Scores</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="{%static 'authentication/assets/css/main.css' %}" />
@@ -25,7 +25,7 @@
             {% if user.is_authenticated %}
             <header id="header">
                 <a href="index.html" class="logo">Hello <strong>{{username}}!</strong></a>
-                <a href="index.html" class="logo"><strong>{{no_team}}!</strong></a>
+                <a href="index.html" class="logo">Your favourite team is <strong>{{no_team}}!</strong></a>
                 {% else %}
                 {% endif %}
                 <ul class="icons">

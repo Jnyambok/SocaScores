@@ -17,8 +17,9 @@ import requests
 from django.shortcuts import render
 import pandas as pd
 import json
-
-
+import os
+import pickle
+os.chdir(r"C:\Users\hp\Desktop\Projects\SocaProject")
 # Create your views here.
 
 def homepage(request):return render(request,"authentication/homepage.html")
@@ -166,7 +167,7 @@ def my_team_stats(request):
     request.session.set_expiry(6000)
     for index,rows in standard_stats.iterrows():
         if no_team == index:
-            i=(rows[0])
+            i = (rows[0])
     context={'no_team':no_team,'username':username,'i':i}
     return render(request,'authentication/my_std_stats.html',context)
 
@@ -178,7 +179,7 @@ def my_fixtures(request):
     request.session.set_expiry(6000)
     for index,rows in standard_stats.iterrows():
         if no_team == index:
-            i=(rows[1])
+            i = (rows[1])
     context={'no_team':no_team,'username':username,'i':i}
     return render(request,'authentication/my_fixtures.html',context)
 
@@ -205,6 +206,27 @@ def my_minutes(request):
             i=(rows[3])
     context={'no_team':no_team,'username':username,'i':i}
     return render(request,'authentication/my_minutes.html',context)
+
+def go_to_pred(request):
+    no_team=request.session['team']
+    username=request.session['name']
+    request.session.set_expiry(6000)
+    context={'no_team':no_team,'username':username}
+    return render(request,'authentication/my_pred.html',context)
+
+def get_pred(request):
+    with open("Emp.pickle","rb") as file_handle:
+        retrieved_data = pickle.load(file_handle)
+        retrieved_data=retrieved_data.replace({0:'Away Win',1:'Draw',2:'Home Win'})
+        retrieved_data.columns=['Predictions']
+        pred=retrieved_data.sample(ignore_index=True)
+        index = pred.index
+        team_pred=pred.at[0,'Predictions']
+        no_team=request.session['team']
+        username=request.session['name']
+        request.session.set_expiry(6000)
+        context={'no_team':no_team,'username':username,'team':team_pred}
+        return render(request,'authentication/my_pred.html',context)
 
 
 def signout(request):

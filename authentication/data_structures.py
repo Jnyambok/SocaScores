@@ -1,4 +1,10 @@
 import pandas as pd
+import pickle
+import os
+os.chdir(r"C:\Users\hp\Downloads")
+
+
+
 class stats():
     team_name=['Manchester City','Chelsea','Liverpool','West Ham United','Arsenal','Tottenham Hotspur','Manchester United','Brighton and Hove Albion','WolverHampton Wanderers',
     'Leicester','Southampton','Crystal Palace','Brentford','Aston Villa','Everton','Leeds','Watford','Burnley','Newcastle United','Norwich']
@@ -110,3 +116,4 @@ class stats():
         if team == index:
             i=(rows[0])
     print(i)
+
